@@ -320,9 +320,6 @@ void Camera::acquire() {
     .pixels = { static_cast<std::byte*>(data), length }
   };
 
-  std::println("Image stride: {}, width: {}, height: {}", pitch, stream_config.size.width,
-                stream_config.size.height);
-
   if (impl_->callback != nullptr) {
     impl_->callback(frame);
   }
