@@ -59,11 +59,10 @@ void Display::Impl::initWindow() {
     throw std::runtime_error("Failed to initialize GLFW");
   }
 
-  // Request OpenGL 3.3 core profile
+  // Request OpenGL ES 3.0 (compatible with Raspberry Pi 5)
+  glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
   glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
-  glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-  glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GLFW_TRUE);  // Required on macOS
+  glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
   glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
 
   static constexpr auto DEFAULT_WIDTH = 1280;
@@ -80,7 +79,7 @@ void Display::Impl::initWindow() {
 //-------------------------------------------------------------------------------------------------
 void Display::Impl::createShaders() {
   const char* vertex_shader_source = R"(
-    #version 330 core
+    #version 300 es
     layout (location = 0) in vec2 aPos;
     layout (location = 1) in vec2 aTexCoord;
     
@@ -93,7 +92,9 @@ void Display::Impl::createShaders() {
   )";
 
   const char* fragment_shader_source = R"(
-    #version 330 core
+    #version 300 es
+    precision mediump float;
+    
     in vec2 TexCoord;
     out vec4 FragColor;
     
