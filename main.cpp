@@ -1,15 +1,19 @@
 #include "camera.h"
+#include "display.h"
 
 auto main() -> int {
-  picam::Camera::Config config;
-  config.camera_name_hint = "TestCam";
-  config.image_size = {1280, 720};
+  auto display = picam::Display();
 
-  picam::Camera camera(config, [](const picam::ImageFrame& frame) {
-    // Process the image frame (e.g., display or save)
+  const auto config = picam::Camera::Config{
+    .camera_name_hint = "TestCam",
+    .image_size = {1280, 720}
+  };
+
+  auto camera = picam::Camera(config, [&display](const picam::ImageFrame& frame) {
+    display.update(frame);
   });
 
-  while (true) {
+  while (display.processEvents()) {
     camera.acquire();
   }
 

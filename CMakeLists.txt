@@ -9,7 +9,25 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 find_package(PkgConfig REQUIRED)
 pkg_check_modules(LIBCAMERA REQUIRED IMPORTED_TARGET libcamera>=0.5)
 
-set(SOURCES image_frame.h camera.h camera.cpp main.cpp)
+# Find OpenGL
+find_package(OpenGL REQUIRED)
+
+# Find GLFW3
+pkg_check_modules(GLFW3 REQUIRED IMPORTED_TARGET glfw3>=3.3)
+
+set(SOURCES 
+  image_frame.h 
+  camera.h 
+  camera.cpp 
+  display.h 
+  display.cpp 
+  main.cpp
+)
+
 add_executable(picam ${SOURCES})
-target_link_libraries(picam PkgConfig::LIBCAMERA)
+target_link_libraries(picam 
+  PkgConfig::LIBCAMERA 
+  PkgConfig::GLFW3 
+  OpenGL::GL
+)
 
