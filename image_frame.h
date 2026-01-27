@@ -4,18 +4,18 @@
 
 #pragma once
 
-#include <cstdint>
-#include <filesystem>
-#include <span>
 #include <chrono>
+#include <cstdint>
+#include <span>
+#include <tuple>
 
 namespace picam {
 
 //=================================================================================================
 /// Image dimensions in pixels
 struct ImageSize {
-    std::uint16_t width{};           //!< Width of the image in pixels
-    std::uint16_t height{};          //!< Height of the image in pixels (number of rows)
+  std::uint16_t width{};   //!< Width of the image in pixels
+  std::uint16_t height{};  //!< Height of the image in pixels (number of rows)
   constexpr auto operator<=>(const ImageSize&) const = default;
 };
 
@@ -24,9 +24,9 @@ struct ImageSize {
 struct ImageFrame {
   struct Header {
     std::chrono::system_clock::time_point timestamp;  //!< Acquistion timestamp
-    std::uint32_t pitch{};           //!< Bytes per row of pixels
-    ImageSize size;                 //!< Image dimensions
-    std::uint32_t format{};          //!< driver backend-specific pixel format
+    std::uint32_t pitch{};                            //!< Bytes per row of pixels
+    ImageSize size;                                   //!< Image dimensions
+    std::uint32_t format{};                           //!< driver backend-specific pixel format
   };
   Header header;
   std::span<std::byte> pixels;  //!< pixel data

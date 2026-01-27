@@ -102,7 +102,7 @@ void Camera::Impl::configureStream(const ImageSize& image_size) {
       std::println("  {}x{}, {}", size.width, size.height, fmt.toString());
     }
   }
-  // specify desired formats in order of preference and let the camera select one
+  // specify desired formats in order of preference, let the camera select one
   // @note: NV12 seems to be broken on the pi
   // @note: Add other formats in the list as needed
   const auto desired_formats = std::array{ libcamera::formats::RGB888, libcamera::formats::YUYV };
@@ -123,7 +123,7 @@ void Camera::Impl::configureStream(const ImageSize& image_size) {
         }
       }
       stream_config.size = best_size;
-      std::println("Closet match to target resolution({}x{}): {}x{}, {}", image_size.width,
+      std::println("Closest match to target resolution({}x{}): {}x{}, {}", image_size.width,
                    image_size.height, best_size.width, best_size.height, fmt.toString());
       break;
     }
@@ -312,10 +312,8 @@ void Camera::acquire() {
     //
     .header = { .timestamp = timestamp,
                 .pitch = pitch,
-                .size{
-                  .width = static_cast<std::uint16_t>(stream_config.size.width),
-                  .height = static_cast<std::uint16_t>(stream_config.size.height)
-                },
+                .size{ .width = static_cast<std::uint16_t>(stream_config.size.width),
+                       .height = static_cast<std::uint16_t>(stream_config.size.height) },
                 .format = sdl_format },
     .pixels = { static_cast<std::byte*>(data), length }
   };
